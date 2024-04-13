@@ -183,7 +183,7 @@ let ruffleSettings = [
     new Setting("Autoriser l'ouverture de liens externes",             "openUrlMode",       "confirm", false, ["allow", "confirm", "deny"]),
     new Setting("Remplacer les embeds Flash",                          "polyfills",         false,     false, null),
     new Setting("Qualité",                                             "quality",           "best",    true,  ["low", "medium", "high", "best"]),
-    new Setting("Échelle",                                             "scale",             "showAll", false, ["showAll", "noborder", "exactfit", "noscale"]),
+    new Setting("Échelle",                                             "scale",             "showAll", true,  ["showAll", "noborder", "exactfit", "noscale"]),
     new Setting("Autoriser le téléchargement du SWF",                  "showSwfDownload",   true,      false, null),
     new Setting("Montrer l'écran de démarrage",                        "showSplashScreen",  true,      false, null),
     new Setting("Afficher l'indicateur « Cliquer pour jouer le son »", "unmuteOverlay",     "hidden",  true,  ["visible", "hidden"] ),
