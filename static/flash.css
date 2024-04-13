@@ -9,18 +9,30 @@ body {
     background-color: black;
 }
 
+a {
+    color: #DA70D6;
+}
+
 input {
     font-family: monospace;
 }
 
-label, h1 {
-    font-family: system-ui;
+label, h1, p, span {
+    font-family: sans-serif;
+}
+
+p, span {
+    color: #C3B1E1;
 }
 
 div.optDiv {
     display: flex;
     flex-direction: row;
     margin-top: 1vh;
+}
+
+h1.errorText {
+    color: red;
 }
 
 input.checkboxOpt {
@@ -41,16 +53,34 @@ label.labelOpt {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    text-align: center;
 }
 
-#errorText {
-    color: red;
-    font-family: system-ui;
+#homeDiv {
+    width: 75%;
+    margin: auto;
+}
+
+#homeImage {
+    width: 100%;
+    height: auto;
+}
+
+#homeImageSrc {
+    display: block;
+    position: relative;
+    text-align: right;
 }
 
 #title {
     color: #CF9FFF;
     text-align: center;
+}
+
+#urlAbDiv {
+    text-align: left;
 }
 
 #urlDiv {

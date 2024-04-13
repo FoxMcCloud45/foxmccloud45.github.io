@@ -101,10 +101,7 @@ function makeOptions(node, settings, createDiv) {
         let currentSetting = settings[i];
         let settingLabel = currentSetting.label;
         
-        console.log("currentSetting's name: " + currentSetting.name);
-        
         if(typeof settingLabel === "string" && settingLabel.length > 0) {
-            console.log("currentSetting's default: " + currentSetting.defaultValue);
             let defaultValue = currentSetting.defaultValue;
             let nodeToUse = node;
             let optionDiv;
@@ -132,8 +129,8 @@ function makeOptions(node, settings, createDiv) {
             }
             
             let optionLabel = document.createElement("label");
-            optionLabel.for = optionElement.id;
-            optionLabel.id  = currentSetting.name + "Label";
+            optionLabel.htmlFor   = optionElement.id;
+            optionLabel.id        = currentSetting.name + "Label";
             optionLabel.innerHTML = settingLabel;
             optionLabel.className = cssClassForLabels;
             
@@ -152,8 +149,14 @@ function makeOptions(node, settings, createDiv) {
             }
         }
     }
-}
+};
 
+/**
+ * Returns whether the given urlString is a valid HTTP(S) URL.
+ * 
+ * @param {string} urlString - The URL string.
+ * @return {boolean} Whether the URL is valid.
+ */
 const isValidUrl = urlString=> {
     try {
         const u = new URL(urlString);
@@ -200,35 +203,53 @@ uiSettings.push.apply(uiSettings, sharedSettings);
 let ruffleConfig = parseSettings(ruffleSettings);
 let customConfig = parseSettings(uiSettings);
 
-let swf = "";
+let swf = defUrl;
 if(Object.hasOwn(ruffleConfig, "url")) {
-    swf = ruffleConfig["url"];
+    swf = ruffleConfig.url;
 }
 
-let errorText = document.getElementById("errorText");
 if(isValidUrl(swf)) {
-    errorText.remove();
-    
     window.RufflePlayer = window.RufflePlayer || {};
-    window.RufflePlayer.config = ruffleConfig;
     window.addEventListener("load", (event) => {
         const ruffle = window.RufflePlayer.newest();
         const player = ruffle.createPlayer();
-        if(customConfig.fit) {
-            document.body.style.overflow = "hidden";
-            container.style.width = "100%";
-            container.style.height = "100%";
-            player.style.width = "100%";
-            player.style.height = "100%";
-        }
+        
+        /* Fits player to screen. We always do it because we want the player
+         * to scale down if the window is smaller than the movie.
+         * 
+         * The 'Fit' option is for scaling UP the movie if the screen is
+         * larger. If disabled, we don't do that scaling up, and that's
+         * configured in CSS later.
+         */
+        player.style.width = "100vw";
+        player.style.height = "100vh";
+        
         container.appendChild(player);
-        player.load(swf).then(() => {
+        player.addEventListener('loadedmetadata', () => {
             let newTitle = swf.substring(swf.lastIndexOf('/')+1);
             if(newTitle !== "") {
                 document.title = newTitle + " - " + baseTitle;
             }
+            if(customConfig.fit) {
+                // Default behavior is "Fit to screen". We just remove the scrollbars.
+                document.body.style.overflow = "hidden";
+            }
+            else {
+                // 'Fit' is disabled: prevent the player from getting larger than the movie.
+                player.style.maxWidth = "" + player.metadata.width + "px";
+                player.style.maxHeight = "" + player.metadata.height + "px";
+            }
+        });
+        player.load(ruffleConfig).then(() => {
+            // Do nothing, there's no true success until the file's metadata is loaded.
         }).catch((e) => {
-            // Ruffle n'a pas pu se charger ; on ne touche pas au titre.
+            document.title = "Erreur - " + baseTitle;
+            console.error(e);
+            let epicFail = document.createElement("h1");
+            epicFail.id        = "ruffleError";
+            epicFail.innerHTML = "Une erreur est survenue pendant le chargement du lecteur.";
+            epicFail.className = "errorText";
+            container.insertBefore(epicFail, container.firstChild);
         });
     });
 }
@@ -236,46 +257,66 @@ else {
     if(swf === defUrl) {
         let title    = document.createElement("h1");
         let urlForm  = document.createElement("form");
+        let urlAbDiv = document.createElement("div");
         let urlLabel = document.createElement("label");
         let urlDiv   = document.createElement("div");
         let urlInput = document.createElement("input");
         let urlBttn  = document.createElement("input");
         let urlOpts  = document.createElement("div");
+        let urlRem   = document.createElement("p");
+        let urlRem2  = document.createElement("p");
         
         let autoPlayOpt = document.createElement("input");
         let fitOpt = document.createElement("input");
         
         makeOptions(urlOpts, uiSettings, true);
-        
-        errorText.remove();
 
         title.id = "title";
         title.innerHTML = "Lecteur Flash Ruffle du tiers-monde";
+        
         urlForm.method = "GET";
-        urlOpts.className = "urlFormDivs";
-        urlOpts.id = "urlOpts";
-        urlDiv.className = "urlFormDivs";
-        urlDiv.id = "urlDiv";
-        urlLabel.for = "url";
+        
+        urlAbDiv.id = "urlAbDiv";
+        
+        urlLabel.htmlFor = "urlInput";
         urlLabel.id = "urlLabel";
         urlLabel.innerHTML = "URL vers un fichier Flash SWF";
         urlLabel.className = cssClassForLabels;
+        
+        urlDiv.className = "urlFormDivs";
+        urlDiv.id = "urlDiv";
+        
         urlInput.name = "url";
-        urlInput.id = "urlInput";
+        urlInput.id = urlLabel.htmlFor;
         urlInput.placeholder = "https://example.org/issou.swf"
         urlInput.type = "text";
+        
         urlBttn.id = "urlBttn";
         urlBttn.value = "►";
         urlBttn.type  = "submit";
+        
+        urlOpts.className = "urlFormDivs";
+        urlOpts.id = "urlOpts";
+        
+        urlRem.innerHTML  = "Remarque : Le serveur distant doit autoriser le « partage des ressources entre origines multiples » (CORS), ce qui n'est souvent pas le cas. <a href=\"https://catbox.moe/\">Catbox.moe</a> le fait.";
+        urlRem2.innerHTML = "Attention : Si vous utilisez les <a href=\"https://quad9.net/\">DNS Quad9</a> sécurisés, <a href=\"https://quad9.net/result?url=files.catbox.moe\">l'hôte files.catbox.moe est actuellement bloqué</a>.";
+        
         urlDiv.appendChild(urlInput);
         urlDiv.appendChild(urlBttn);
+        urlAbDiv.appendChild(urlLabel);
+        urlForm.appendChild(urlAbDiv);
         urlForm.appendChild(urlDiv);
         urlForm.appendChild(urlOpts);
         container.appendChild(title);
-        container.appendChild(urlLabel);
         container.appendChild(urlForm);
+        container.appendChild(urlRem);
+        container.appendChild(urlRem2);
     }
     else {
-        errorText.innerHTML = "URL invalide.";
+        let urlError = document.createElement("h1");
+        urlError.id = "urlErrorText";
+        urlError.innerHTML = "URL invalide.";
+        urlError.className = "errorText";
+        container.appendChild(urlError);
     }
 }
