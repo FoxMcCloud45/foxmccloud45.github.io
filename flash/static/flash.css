@@ -1,0 +1,111 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: black;
+}
+
+a {
+    color: #DA70D6;
+}
+
+input {
+    font-family: monospace;
+}
+
+label, h1, p, span {
+    font-family: sans-serif;
+}
+
+p, span {
+    color: #C3B1E1;
+}
+
+div.optDiv {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1vh;
+}
+
+h1.errorText {
+    color: red;
+}
+
+input.checkboxOpt {
+    accent-color: #990099;
+    order: 1;
+}
+
+label.labelOpt {
+    color: #C3B1E1;
+    order: 2;
+}
+
+#container {
+    --splash-screen-background: black;
+    --logo-display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    text-align: center;
+}
+
+#homeDiv {
+    width: 75%;
+    margin: auto;
+}
+
+#homeImage {
+    width: 100%;
+    height: auto;
+}
+
+#homeImageSrc {
+    display: block;
+    position: relative;
+    text-align: right;
+}
+
+#title {
+    color: #CF9FFF;
+    text-align: center;
+}
+
+#urlAbDiv {
+    text-align: left;
+}
+
+#urlDiv {
+    display: flex;
+    width: 50vw;
+    height: 3vh;
+}
+
+#urlLabel {
+    font-weight: bold;
+}
+
+#urlInput {
+    border: 1px solid #FFFFFF;
+    background-color: #DDCCFF;
+    margin-right: 1vw;
+    width: 90%;
+}
+
+#urlOpts {
+    margin-top: 2vh;
+}
+
+#urlBttn {
+    background-color: #990099;
+    border: none;
+    width: 10%;
+}
