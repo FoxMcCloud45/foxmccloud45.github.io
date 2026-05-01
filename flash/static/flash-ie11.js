@@ -44,7 +44,7 @@ if(!checkES6Support()) {
     
         var ie11Img = new Image();
         ie11Img.id = "homeImage";
-        ie11Img.src = "/images/ie11.jpg";
+        ie11Img.src = "/flash/images/ie11.jpg";
         ie11Div.appendChild(ie11Img);
         
         var ie11ImgSrc = document.createElement("span");
