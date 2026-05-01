@@ -178,7 +178,7 @@ let ruffleSettings = [
     new Setting("AutoPlay",                                            "autoplay",          "auto",    true,  ["auto", "off", "on"]),
     new Setting("Couleur d'arrière-plan",                              "backgroundColor",   "#000000", false, null),
     new Setting("Privilégier Adobe Flash",                             "favorFlash",        false,     false, null),
-    new Setting("Letterboxing en plein écran",                         "letterbox",         "off",     false, ["fullscreen", "off", "on"]),
+    new Setting("Letterboxing en plein écran",                         "letterbox",         "off",     true,  ["fullscreen", "off", "on"]),
     new Setting("Menu multimédia dans le menu contextuel",             "menu",              true,      true,  null),
     new Setting("Autoriser l'ouverture de liens externes",             "openUrlMode",       "confirm", false, ["allow", "confirm", "deny"]),
     new Setting("Remplacer les embeds Flash",                          "polyfills",         false,     false, null),
